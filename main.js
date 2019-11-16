@@ -1,8 +1,5 @@
-$('.images > img:nth-child(1)').addClass('current')
-$('.images > img:nth-child(2)').addClass('enter')
-$('.images > img:nth-child(3)').addClass('enter')
-
-let n = 1
+let n 
+初始化();
 setInterval(() => {
   console.log(n)
   $(`.images > img:nth-child(${x(n)})`).removeClass('current').addClass('leave').one('transitionend', (e) => {
@@ -22,6 +19,15 @@ function x(n) {
   return n
 }
 
+function 初始化(){
+  n = 1
+  $(`.images > img:nth-child(${n})`).addClass('current')
+  .siblings().addClass('enter')
+}
+
+function makeCurrent($node){
+  $node.removeClass('enter leave').addClass('current')
+}
 
 
 
