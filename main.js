@@ -21,7 +21,7 @@ document.addEventListener('visibilitychange', function(e){
     },2000)
   }
 })
-
+//提交加注释。
 function getImage(n) {
   return $(`.images > img:nth-child(${m(n)})`)
 }
