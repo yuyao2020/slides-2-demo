@@ -1,86 +1,53 @@
-let n
-初始化();
-let timer = setInterval(() => {
-  makeLeave(getImage(n)).one('transitionend', (e) => {
-    makeEnter($(e.currentTarget))
-  })
-  makeCurrent(getImage(n + 1))
-  n += 1
-}, 2000)
+let $buttons = $('#buttonWrapper>button')
+let $slides = $('#slides')
+let $images = $slides.children('img')
+let current = 0
+makeFakeSlides()
+$slides.css({transform: 'translateX(-666px)'})
+bindEvents()
 
-document.addEventListener('visibilitychange', function(e){
-  if(document.hidden){
-    window.clearInterval(timer)
-  }else{
-    timer = setInterval(()=>{
-      makeLeave(getImage(n)).one('transitionend',(e)=>{
-        makeEnter($(e.currentTarget))
-      })
-      makeCurrent(getImage(n+1))
-      n += 1
-    },2000)
-  }
-})
-//提交加注释。
-function getImage(n) {
-  return $(`.images > img:nth-child(${m(n)})`)
-}
 
-function m(n) {
-  if (n > 3) {
-    n = n % 3
-    if (n === 0) {
-      n = 3
+function bindEvents(){
+  $buttons.eq(0).on('click', function(){
+    if(current == 2){
+      console.log('从最后一张到第一张')  
+      $slides.css({transform:'translateX(-2664px)'})
+        .one('transitionend', function(){
+          $slides.hide()
+            .offset()
+          $slides.css({transform: 'translateX(-666px)'})
+            .show()
+        })
+    }else{
+      $slides.css({transform:'translateX(-666px)'})
     }
-  } //n始终为1、2、3
-  return n
+    current = 0
+  })
+  $buttons.eq(1).on('click', function(){
+    $slides.css({transform:'translateX(-1332px)'})
+    current = 1
+  })
+  $buttons.eq(2).on('click', function(){
+    if(current == 0){
+      console.log('从第一张到最后一张') 
+      $slides.css({transform:'translateX(0px)'})
+        .one('transitionend', function(){
+          $slides.hide()
+            .offset()
+          $slides.css({transform: 'translateX(-1998px)'})
+            .show()
+        })
+    }else{
+      $slides.css({transform:'translateX(-1998px)'})
+    }
+    current =2
+  })
 }
 
-function 初始化() {
-  n = 1
-  $(`.images > img:nth-child(${n})`).addClass('current')
-    .siblings().addClass('enter')
+ 
+function makeFakeSlides(){
+  let $firstCopy = $images.eq(0).clone(true)
+  let $lastCopy = $images.eq($images.length-1).clone(true)
+  $slides.append($firstCopy)
+  $slides.prepend($lastCopy)
 }
-
-function makeCurrent($node) {
-  $node.removeClass('enter leave').addClass('current')
-  return $node
-}
-
-function makeLeave($node) {
-  $node.removeClass('current enter').addClass('leave')
-  return $node
-}
-
-function makeEnter($node) {
-  $node.removeClass('current leave').addClass('enter')
-  return $node
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
